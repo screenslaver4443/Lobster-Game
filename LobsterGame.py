@@ -34,16 +34,17 @@ class lobster():
     def draw(self, screen):
         screen.blit(self.image, [self.x, self.y]) #draws sprite image
 
-class worm: #Creates a worm class that will be eaten by the player
+class worm(): #Creates a worm class that will be eaten by the player
     def __init__(self):
         self.size = 30
         self.x = random.randrange(0, SCREEN_WIDTH-self.size)
         self.y = random.randrange(0, SCREEN_HEIGHT-self.size)
         self.eaten = False
+        self.rectvalue = pygame.Rect(self.x, self.y, self.x-self.size, self.x-self.size)
         self.image = pygame.image.load("Assets/worm.png")
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
-    def collision(self):
-        pass
+    def collisionCheck(self, lobster):
+        self.eaten = self.rectvalue.colliderect(lobster.rectvalue)
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
     
