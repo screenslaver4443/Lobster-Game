@@ -33,16 +33,23 @@ class lobster():
         pygame.draw.rect(screen, WHITE, [lob.x, lob.y, lob.size, lob.size])
 
 ##### Colours #####
+# sourcery skip: merge-comparisons
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 RED   = (255,   0,   0)
 
 ##### Screen Initialisation #####
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 500
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Lobster Game")
+
+#Image loading
+background = pygame.image.load("assets/sand.jpg")
+
+#Transformations
+background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT)) #scales background to screen size
 
 lob  = lobster()
 done = False              
@@ -72,7 +79,9 @@ while not done:
     #Movement and drawing
     lob.move()
     
+    #drawing
     screen.fill(BLACK)
+    screen.blit(background, (0,0))
     lob.draw(screen)
     pygame.display.flip()
     clock.tick(60)
