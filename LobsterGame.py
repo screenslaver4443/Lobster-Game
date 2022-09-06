@@ -1,4 +1,4 @@
-# Miss Hocking
+# Nikolai and contributors
 # Lobster Game
 # Including images and collisions between characters
 # 20/08/2020
@@ -36,9 +36,9 @@ class lobster():
 
 class worm: #Creates a worm class that will be eaten by the player
     def __init__(self):
-        self.x = 200
-        self.y = 200
         self.size = 30
+        self.x = random.randrange(0, SCREEN_WIDTH-self.size)
+        self.y = random.randrange(0, SCREEN_HEIGHT-self.size)
         self.eaten = False
         self.image = pygame.image.load("Assets/worm.png")
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
@@ -67,7 +67,7 @@ background = pygame.image.load("assets/sand.jpg") #Load the background
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT)) #scales background to screen size
 
 lob  = lobster() #makes lob equal to the class lobster
-wom = [worm() for i in range(10)] #makes wom equal to the class worm
+wom = [worm() for i in range(20)] #makes wom equal to the class worm
 
 done = False              #Prepares the quit variable
 clock = pygame.time.Clock() #prepares the clock variable
