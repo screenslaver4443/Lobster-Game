@@ -34,7 +34,14 @@ class lobster():
     def draw(self, screen):
         screen.blit(self.image, [self.x, self.y]) #draws sprite image
 
-
+class worm: #Creates a worm class that will be eaten by the player
+    def __init__(self):
+        self.x = 200
+        self.y = 200
+        self.size = 30
+        self.eaten = False
+        self.image = pygame.image.load("Assets/worm.png")
+    
 
 
 ##### Colours #####
