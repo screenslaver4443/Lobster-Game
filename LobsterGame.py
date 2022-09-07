@@ -17,11 +17,13 @@ class lobster():
         self.size = 80
         self.image = pygame.image.load("Assets/lobster.png") # load sprite image
         self.image = pygame.transform.scale(self.image, (self.size, self.size)) #resizes sprite image
+        self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
 
     def move(self):
         self.check_walls()
         self.x += self.speedX
         self.y += self.speedY
+        self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
     
     def check_walls(self):
         if self.x < 0 or self.x > SCREEN_WIDTH - self.size:
@@ -34,16 +36,22 @@ class lobster():
     def draw(self, screen):
         screen.blit(self.image, [self.x, self.y]) #draws sprite image
 
-class worm: #Creates a worm class that will be eaten by the player
+class worm(): #Creates a worm class that will be eaten by the player
     def __init__(self):
         self.size = 30
         self.x = random.randrange(0, SCREEN_WIDTH-self.size)
         self.y = random.randrange(0, SCREEN_HEIGHT-self.size)
         self.eaten = False
+        self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
         self.image = pygame.image.load("Assets/worm.png")
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
-    def collision(self):
-        pass
+    def collisionCheck(self, lobsterRect):
+        self.eaten = self.rectvalue.colliderect(lobsterRect)
+        if self.eaten == True: 
+            self.x = random.randrange(0, SCREEN_WIDTH-self.size)
+            self.y = random.randrange(0, SCREEN_HEIGHT-self.size) 
+            self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
+            eat.play()
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
     
@@ -62,12 +70,16 @@ size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Lobster Game")
 
+##### Loading #####
 #Background loading and transforming
 background = pygame.image.load("assets/sand.jpg") #Load the background
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT)) #scales background to screen size
 
+#Load Sounds
+eat = pygame.mixer.Sound("assets/bite.mp3")
+
 lob  = lobster() #makes lob equal to the class lobster
-wom = [worm() for i in range(20)] #makes wom equal to the class worm
+wom = [worm() for i in range(100)] #makes wom equal to the class worm
 
 done = False              #Prepares the quit variable
 clock = pygame.time.Clock() #prepares the clock variable
@@ -95,7 +107,8 @@ while not done:
 
     #Movement 
     lob.move()
-  
+    for worm in wom:
+        worm.collisionCheck(lob.rectvalue)
     
     #drawing
     screen.fill(BLACK)
