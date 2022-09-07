@@ -17,11 +17,13 @@ class lobster():
         self.size = 80
         self.image = pygame.image.load("Assets/lobster.png") # load sprite image
         self.image = pygame.transform.scale(self.image, (self.size, self.size)) #resizes sprite image
+        self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
 
     def move(self):
         self.check_walls()
         self.x += self.speedX
         self.y += self.speedY
+        self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
     
     def check_walls(self):
         if self.x < 0 or self.x > SCREEN_WIDTH - self.size:
@@ -40,11 +42,15 @@ class worm(): #Creates a worm class that will be eaten by the player
         self.x = random.randrange(0, SCREEN_WIDTH-self.size)
         self.y = random.randrange(0, SCREEN_HEIGHT-self.size)
         self.eaten = False
-        self.rectvalue = pygame.Rect(self.x, self.y, self.x-self.size, self.x-self.size)
+        self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
         self.image = pygame.image.load("Assets/worm.png")
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
-    def collisionCheck(self, lobster):
-        self.eaten = self.rectvalue.colliderect(lobster.rectvalue)
+    def collisionCheck(self, lobsterRect):
+        self.eaten = self.rectvalue.colliderect(lobsterRect)
+        if self.eaten == True: 
+            self.x = random.randrange(0, SCREEN_WIDTH-self.size)
+            self.y = random.randrange(0, SCREEN_HEIGHT-self.size) 
+            self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
     
@@ -68,7 +74,7 @@ background = pygame.image.load("assets/sand.jpg") #Load the background
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT)) #scales background to screen size
 
 lob  = lobster() #makes lob equal to the class lobster
-wom = [worm() for i in range(20)] #makes wom equal to the class worm
+wom = [worm() for i in range(100)] #makes wom equal to the class worm
 
 done = False              #Prepares the quit variable
 clock = pygame.time.Clock() #prepares the clock variable
@@ -96,13 +102,13 @@ while not done:
 
     #Movement 
     lob.move()
-  
     
     #drawing
     screen.fill(BLACK)
     screen.blit(background, (0,0))
     for worm in wom:
         worm.draw()
+        worm.collisionCheck(lob.rectvalue)
     lob.draw(screen)
     pygame.display.flip()
     clock.tick(60)
