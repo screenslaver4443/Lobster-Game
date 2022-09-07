@@ -70,7 +70,7 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Lobster Game")
+pygame.display.set_caption("Lobster Game, By Tap")
 
 ##### Loading #####
 #Background loading and transforming
@@ -81,7 +81,7 @@ background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT)) #
 eat = pygame.mixer.Sound("assets/bite.mp3")
 
 #Load Font
-myfont = pygame.font.Font(None, 10) #Load the default font
+myfont = pygame.font.Font(None, 75) #Load the default font
 
 ##### Variables #####
 lob  = lobster() #makes lob equal to the class lobster
