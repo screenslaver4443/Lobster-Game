@@ -46,11 +46,13 @@ class worm(): #Creates a worm class that will be eaten by the player
         self.image = pygame.image.load("Assets/worm.png")
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
     def collisionCheck(self, lobsterRect):
+        global score
         self.eaten = self.rectvalue.colliderect(lobsterRect)
         if self.eaten == True: 
             self.x = random.randrange(0, SCREEN_WIDTH-self.size)
             self.y = random.randrange(0, SCREEN_HEIGHT-self.size) 
             self.rectvalue = pygame.Rect(self.x, self.y, self.size, self.size)
+            score += 1
             eat.play()
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
@@ -68,7 +70,7 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Lobster Game")
+pygame.display.set_caption("Lobster Game, By Tap")
 
 ##### Loading #####
 #Background loading and transforming
@@ -78,8 +80,15 @@ background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT)) #
 #Load Sounds
 eat = pygame.mixer.Sound("assets/bite.mp3")
 
+#Load Font
+myfont = pygame.font.Font(None, 75) #Load the default font
+
+##### Variables #####
 lob  = lobster() #makes lob equal to the class lobster
 wom = [worm() for i in range(100)] #makes wom equal to the class worm
+
+global score
+score = 0
 
 done = False              #Prepares the quit variable
 clock = pygame.time.Clock() #prepares the clock variable
@@ -116,6 +125,7 @@ while not done:
     for worm in wom:
         worm.draw()
     lob.draw(screen)
+    screen.blit(myfont.render("Score: "+str(score), True, BLACK), (0,0))
     pygame.display.flip()
     clock.tick(60)
 
