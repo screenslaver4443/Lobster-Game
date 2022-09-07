@@ -125,6 +125,7 @@ while not done:
     for worm in wom:
         worm.draw()
     lob.draw(screen)
+    screen.blit(myfont.render("Score: "+str(score), True, BLACK), (0,0))
     pygame.display.flip()
     clock.tick(60)
 
