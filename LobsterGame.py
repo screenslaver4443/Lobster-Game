@@ -3,6 +3,7 @@
 # Including images and collisions between characters
 # 20/08/2020
 
+from turtle import screensize
 import pygame
 import random
 pygame.init()
@@ -60,7 +61,7 @@ class worm(): #Creates a worm class that will be eaten by the player
 
 
 ##### Colours #####
-# sourcery skip: merge-comparisons
+# sourcery skip: for-index-underscore, merge-comparisons, remove-str-from-fstring, use-fstring-for-concatenation remove-str-from-fstring, use-fstring-for-concatenation
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 RED   = (255,   0,   0)
@@ -70,7 +71,7 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 size = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Lobster Game, By Tap")
+pygame.display.set_caption("Lobster Game, By Tap") #sets the caption for the window
 
 ##### Loading #####
 #Background loading and transforming
@@ -88,11 +89,15 @@ lob  = lobster() #makes lob equal to the class lobster
 wom = [worm() for i in range(100)] #makes wom equal to the class worm
 
 global score
+score = 0 #sets score to 0
 time = 60*60 #seconds times fps
-score = 0
 
 done = False              #Prepares the quit variable
 clock = pygame.time.Clock() #prepares the clock variable
+
+#### Scene initialization ####
+global scene #makes the scene variable global
+scene = "Game" # Sets the scene variable to the game scene
 
 ##### Main Program Loop #####
 while not done:
@@ -100,36 +105,46 @@ while not done:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT:
             done = True
-        elif event.type == pygame.KEYDOWN: #TODO: Put this in a separate function within the class lobster
-            if event.key == pygame.K_LEFT:
-                lob.speedX = -3
-            elif event.key == pygame.K_RIGHT:
-                lob.speedX = 3
-            if event.key == pygame.K_UP:
-                lob.speedY = -3
-            elif event.key == pygame.K_DOWN:
-                lob.speedY = 3
+        elif event.type == pygame.KEYDOWN: 
+            if scene == "Game":
+                if event.key == pygame.K_LEFT:
+                    lob.speedX = -3
+                elif event.key == pygame.K_RIGHT:
+                    lob.speedX = 3
+                if event.key == pygame.K_UP:
+                    lob.speedY = -3
+                elif event.key == pygame.K_DOWN:
+                    lob.speedY = 3
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                lob.speedX = 0
-            elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                lob.speedY = 0
-
-    #Movement 
-    lob.move()
-    for worm in wom:
-        worm.collisionCheck(lob.rectvalue)
-    time -= 1
-    
-    #drawing
-    screen.fill(BLACK)
-    screen.blit(background, (0,0))
-    for worm in wom:
-        worm.draw()
-    lob.draw(screen)
-    screen.blit(myfont.render("Score: "+str(score), True, BLACK), (0,0))
-    screen.blit(myfont.render("Time: "+str(round(time/60, 1)), True, BLACK), (500,0))
+            if scene == "Game":
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    lob.speedX = 0
+                elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    lob.speedY = 0
+    if scene == "Game":
+        #Movement 
+        lob.move()
+        for worm in wom:
+            worm.collisionCheck(lob.rectvalue)
+        time -= 1
+        
+        #drawing
+        screen.blit(background, (0,0))
+        for worm in wom:
+            worm.draw()
+        lob.draw(screen)
+        screen.blit(myfont.render("Score: "+str(score), True, BLACK), (0,0)) #Renders the score
+        screen.blit(myfont.render("Time: "+str(round(time/60, 1)), True, BLACK), (500,0)) #Renders the timer
+    if scene == "End":
+        screen.fill(BLACK)
+        if time <= 0:
+            screen.blit(myfont.render("Time's Up", True, WHITE), (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2-100))
+        else:
+            screen.blit(myfont.render("You have have died", True, WHITE), (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2-100))
+        screen.blit(myfont.render("Score: "+str(score), True, WHITE), (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2))
     pygame.display.flip()
     clock.tick(60)
+    if time < 0  and scene == "Game":
+        scene = "End"
 
 pygame.quit()
