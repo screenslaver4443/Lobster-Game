@@ -88,6 +88,7 @@ lob  = lobster() #makes lob equal to the class lobster
 wom = [worm() for i in range(100)] #makes wom equal to the class worm
 
 global score
+time = 60*60 #seconds times fps
 score = 0
 
 done = False              #Prepares the quit variable
@@ -118,6 +119,7 @@ while not done:
     lob.move()
     for worm in wom:
         worm.collisionCheck(lob.rectvalue)
+    time -= 1
     
     #drawing
     screen.fill(BLACK)
@@ -126,6 +128,7 @@ while not done:
         worm.draw()
     lob.draw(screen)
     screen.blit(myfont.render("Score: "+str(score), True, BLACK), (0,0))
+    screen.blit(myfont.render("Time: "+str(round(time/60, 1)), True, BLACK), (500,0))
     pygame.display.flip()
     clock.tick(60)
 
