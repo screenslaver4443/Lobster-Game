@@ -89,7 +89,6 @@ lob  = lobster() #makes lob equal to the class lobster
 wom = [worm() for i in range(100)] #makes wom equal to the class worm
 
 global score
-score = 0 #sets score to 0
 time = 60*60 #seconds times fps
 
 done = False              #Prepares the quit variable
@@ -97,7 +96,7 @@ clock = pygame.time.Clock() #prepares the clock variable
 
 #### Scene initialization ####
 global scene #makes the scene variable global
-scene = "Game" # Sets the scene variable to the game scene
+scene = "Start" # Sets the scene variable to the game scene
 
 ##### Main Program Loop #####
 if __name__ == "__main__":
@@ -116,6 +115,10 @@ if __name__ == "__main__":
                         lob.speedY = -3
                     elif event.key == pygame.K_DOWN:
                         lob.speedY = 3
+                if scene == "Start" and event.key == pygame.K_SPACE:
+                    score = 0
+                    time = 60*60
+                    scene = "Game"
             elif event.type == pygame.KEYUP:
                 if scene == "Game":
                     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -143,6 +146,10 @@ if __name__ == "__main__":
             else:
                 screen.blit(myfont.render("You have have died", True, WHITE), (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2-100))
             screen.blit(myfont.render("Score: "+str(score), True, WHITE), (SCREEN_WIDTH/2-125, SCREEN_HEIGHT/2))
+        if scene == "Start":
+            screen.fill(WHITE)
+            screen.blit(myfont.render("Welcome to Lobster Game", True, BLACK), (SCREEN_WIDTH/2-225, SCREEN_HEIGHT/2-100))
+            screen.blit(myfont.render("Press space to play", True, BLACK), (SCREEN_WIDTH/2-225, SCREEN_HEIGHT/2))
         pygame.display.flip()
         clock.tick(60)
         if time < 0  and scene == "Game":
